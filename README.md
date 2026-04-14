@@ -129,7 +129,7 @@ Stage 2:
 готовий runtime image
 Як зібрати образ
 Через shell-скрипт
-./build.sh
+./run.sh
 Або вручну
 docker build --build-arg MAIN_FILE=main3.js -t solarsystem:1 .
 Як запустити контейнер
