@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Guess the Number</h1>
+        <p class="subtitle">Спробуй вгадати число від 1 до 100</p>
+
+        <div class="player-box">
+            <p><strong>Твій ID:</strong> {{ player_id_short }}</p>
+            <p><strong>Зіграно ігор:</strong> {{ stats.games_played }}</p>
+            <p><strong>Найкращий результат:</strong>
+                {% if stats.best_result %}
+                    {{ stats.best_result }} спроб
+                {% else %}
+                    ще немає завершених ігор
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="status {{ result_type }}">
+            {{ message }}
+        </div>
+
+        <div class="attempts">
+            Поточна кількість спроб у цій грі: <strong>{{ attempts }}</strong>
+        </div>
+
+        <form method="post" class="game-form">
+            <input
+                type="number"
+                name="guess"
+                min="1"
+                max="100"
+                placeholder="Введи число"
+                required
+            >
+            <button type="submit">Перевірити</button>
+        </form>
+
+        <form method="post" class="restart-form">
+            <button type="submit" name="restart" value="1" class="secondary">
+                Почати нову гру
+            </button>
+        </form>
+
+        <h2>Твоя історія ігор</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID гри</th>
+                    <th>К-сть спроб</th>
+                    <th>Час гри</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if history %}
+                    {% for row in history %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.attempts }}</td>
+                        <td>{{ row.played_at }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">У тебе ще немає завершених ігор</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

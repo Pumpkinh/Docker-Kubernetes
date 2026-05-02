@@ -1,0 +1,105 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f5f8;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+h1 {
+    font-size: 48px;
+    color: #2b76c0;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.banner {
+    display: inline-block;
+    margin: 0 0 20px;
+    padding: 8px 12px;
+    background: #fff4d8;
+    border: 1px solid #f0c75e;
+    border-radius: 6px;
+    color: #5f4500;
+    font-size: 16px;
+}
+
+.card {
+    background: #eef2f7;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.status {
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.status.info {
+    background: #e6effa;
+}
+
+.status.warning {
+    background: #f6ebc8;
+}
+
+.status.success {
+    background: #e4f3e7;
+}
+
+.status.error {
+    background: #f9e1e1;
+}
+
+.attempts {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+input {
+    padding: 10px;
+    font-size: 18px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    background: #2b76c0;
+    color: white;
+    border: none;
+    border-radius: 6px;
+}
+
+button.secondary {
+    background: gray;
+    margin-top: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
