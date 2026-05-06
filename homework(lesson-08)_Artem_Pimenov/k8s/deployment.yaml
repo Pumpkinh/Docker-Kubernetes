@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: course-app
+  labels:
+    app: course-app
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: course-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: course-app
+    spec:
+      containers:
+        - name: course-app
+          image: pimenov2unit/course-app:lesson-08
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: POSTGRES_DB
+              value: guessdb
+            - name: POSTGRES_USER
+              value: guessuser
+            - name: POSTGRES_PASSWORD
+              value: guesspass123
+            - name: POSTGRES_HOST
+              value: db
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: FLASK_SECRET_KEY
+              value: super-secret-key
+            - name: APP_BANNER
+              valueFrom:
+                configMapKeyRef:
+                  name: course-app-config
+                  key: APP_BANNER
+            - name: APP_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: course-app-config
+                  key: APP_VERSION
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
