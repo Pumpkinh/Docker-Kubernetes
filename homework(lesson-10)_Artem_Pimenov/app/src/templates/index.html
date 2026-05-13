@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Вгадай число</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Вгадай число</h1>
+    <p class="subtitle">Спробуй вгадати число від 1 до 100</p>
+    <p class="banner">{{ app_banner }} · {{ app_version }}</p>
+
+    <div class="card">
+        <p><strong>Твій ID:</strong> {{ player_id_short }}</p>
+        <p><strong>Запит обслуговує Pod:</strong> {{ pod_name }}</p>
+
+        <p><strong>Зіграно ігор:</strong> {{ stats.games_played }}</p>
+
+        <p>
+            <strong>Найкращий результат:</strong>
+            {% if stats.best_result %}
+                {{ stats.best_result }} спроб
+            {% else %}
+                ще немає
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="status {{ result_type }}">
+        {{ message }}
+    </div>
+
+    <p class="attempts">
+        Поточні спроби: <strong>{{ attempts }}</strong>
+    </p>
+
+    <form method="post">
+        <input
+            type="number"
+            name="guess"
+            min="1"
+            max="100"
+            value="{{ last_guess }}"
+            placeholder="Введи число"
+            required
+        >
+        <button type="submit">Перевірити</button>
+    </form>
+
+    <form method="post">
+        <button name="restart" value="1" class="secondary">
+            Нова гра
+        </button>
+    </form>
+
+    <h2>Історія</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Спроби</th>
+                <th>Час</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in history %}
+            <tr>
+                <td>{{ row.id }}</td>
+                <td>{{ row.attempts }}</td>
+                <td
+                    class="local-datetime"
+                    data-utc="{{ row.played_at_iso }}"
+                >
+                    {{ row.played_at_display }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    document.querySelectorAll(".local-datetime").forEach((cell) => {
+        const utcValue = cell.dataset.utc;
+
+        if (!utcValue) {
+            return;
+        }
+
+        const parsedDate = new Date(utcValue);
+
+        if (Number.isNaN(parsedDate.getTime())) {
+            return;
+        }
+
+        cell.textContent = new Intl.DateTimeFormat("uk-UA", {
+            dateStyle: "short",
+            timeStyle: "medium",
+        }).format(parsedDate);
+    });
+</script>
+
+</body>
+</html>
