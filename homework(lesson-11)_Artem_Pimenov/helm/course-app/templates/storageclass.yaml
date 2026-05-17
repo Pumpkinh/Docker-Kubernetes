@@ -1,0 +1,11 @@
+{{- if .Values.storage.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ required "storage.className is required when storage.enabled=true" .Values.storage.className }}
+  labels:
+    {{- include "course-app.labels" . | nindent 4 }}
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+{{- end }}

@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS game_results;
+
+CREATE TABLE IF NOT EXISTS game_results (
+    id SERIAL PRIMARY KEY,
+    player_id VARCHAR(64) NOT NULL,
+    attempts INTEGER NOT NULL,
+    played_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

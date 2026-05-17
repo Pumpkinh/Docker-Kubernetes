@@ -1,0 +1,7 @@
+Course app has been deployed.
+
+Ingress host:
+  http://{{ .Values.ingress.host }}/
+
+PostgreSQL host used by the app:
+  {{ include "course-app.postgresHost" . }}

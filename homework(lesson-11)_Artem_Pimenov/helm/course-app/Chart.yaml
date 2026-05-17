@@ -1,0 +1,11 @@
+apiVersion: v2
+name: course-app
+description: Guess the Number application chart with PostgreSQL dependency
+type: application
+version: 0.1.0
+appVersion: "lesson-11"
+dependencies:
+  - name: postgresql
+    version: 18.1.11
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled

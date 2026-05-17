@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: course-app-config
+  labels:
+    app: course-app
+data:
+  APP_BANNER: "Lesson 11: Helm deployment automation"
+  APP_VERSION: "lesson-11"

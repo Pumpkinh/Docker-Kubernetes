@@ -1,0 +1,90 @@
+replicaCount: 10
+
+image:
+  repository: pimenov2unit/course-app
+  tag: lesson-11
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  host: course-app.local
+  path: /
+  pathType: Prefix
+
+config:
+  appBanner: "Lesson 11: Helm deployment automation"
+  appVersion: "lesson-11"
+
+secret:
+  flaskSecretKey: super-secret-key
+
+postgres:
+  host: ""
+  port: "5432"
+  database: guessdb
+  user: guessuser
+  password: guesspass123
+
+storage:
+  enabled: false
+  className: local-storage
+  size: 1Gi
+  hostPath: /var/lib/course-app/helm-postgresql-data
+  nodeName: ""
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+readinessProbe:
+  path: /ready
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 2
+
+livenessProbe:
+  path: /health
+  initialDelaySeconds: 30
+  periodSeconds: 20
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+strategy:
+  maxSurge: 1
+  maxUnavailable: 0
+
+postgresql:
+  enabled: true
+  auth:
+    username: guessuser
+    password: guesspass123
+    database: guessdb
+  volumePermissions:
+    enabled: false
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 1Gi
+    initdb:
+      scripts:
+        init.sql: |
+          CREATE TABLE IF NOT EXISTS game_results (
+              id SERIAL PRIMARY KEY,
+              player_id VARCHAR(64) NOT NULL,
+              attempts INTEGER NOT NULL,
+              played_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+          );

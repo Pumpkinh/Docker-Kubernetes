@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.git
+app/src/__pycache__/
+app/src/templates/*.html~
+app/src/static/*.css~
