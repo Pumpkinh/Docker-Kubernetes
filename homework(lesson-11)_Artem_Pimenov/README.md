@@ -223,11 +223,28 @@ pvc/data-course-app-postgresql-0   Bound
 
 ## Перевірка
 
-HTTP endpoints:
+Отримати адресу Ingress controller у своєму кластері:
 
 ```bash
-curl -fsS -H 'Host: course-app.local' http://192.168.99.100/health
-curl -fsS -H 'Host: course-app.local' http://192.168.99.100/ready
+kubectl get ingress course-app -o wide
+```
+
+Підставити IP або DNS Ingress controller замість `<ingress-address>`:
+
+```bash
+curl -fsS -H 'Host: course-app.local' http://<ingress-address>/health
+curl -fsS -H 'Host: course-app.local' http://<ingress-address>/ready
+```
+
+Альтернативно можна додати запис у `/etc/hosts` і перевіряти без `Host` header:
+
+```text
+<ingress-address> course-app.local
+```
+
+```bash
+curl -fsS http://course-app.local/health
+curl -fsS http://course-app.local/ready
 ```
 
 Очікувано:
