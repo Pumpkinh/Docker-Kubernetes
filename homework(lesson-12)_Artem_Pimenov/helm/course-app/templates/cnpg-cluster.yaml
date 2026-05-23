@@ -1,0 +1,35 @@
+{{- if .Values.cnpg.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "course-app.cnpgClusterName" . }}
+  labels:
+    {{- include "course-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+spec:
+  instances: {{ .Values.cnpg.instances }}
+  {{- with .Values.cnpg.imageName }}
+  imageName: {{ . | quote }}
+  {{- end }}
+  storage:
+    size: {{ .Values.cnpg.storage.size | quote }}
+    {{- with .Values.cnpg.storage.storageClass }}
+    storageClass: {{ . | quote }}
+    {{- end }}
+  bootstrap:
+    initdb:
+      database: {{ .Values.postgres.database | quote }}
+      owner: {{ .Values.postgres.user | quote }}
+      secret:
+        name: {{ include "course-app.cnpgCredentialsSecretName" . }}
+      postInitApplicationSQL:
+        - |
+          CREATE TABLE IF NOT EXISTS game_results (
+              id SERIAL PRIMARY KEY,
+              player_id VARCHAR(64) NOT NULL,
+              attempts INTEGER NOT NULL,
+              played_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+          );
+          ALTER TABLE game_results OWNER TO {{ .Values.postgres.user }};
+          ALTER SEQUENCE game_results_id_seq OWNER TO {{ .Values.postgres.user }};
+{{- end }}

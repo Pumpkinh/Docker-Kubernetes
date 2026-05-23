@@ -1,0 +1,31 @@
+{{- if and .Values.storage.enabled .Values.cnpg.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-postgresql-data
+  labels:
+    {{- include "course-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+spec:
+  capacity:
+    storage: {{ .Values.storage.size }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ required "storage.className is required when storage.enabled=true" .Values.storage.className }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ include "course-app.cnpgClusterName" . }}-1
+  hostPath:
+    path: {{ required "storage.hostPath is required when storage.enabled=true" .Values.storage.hostPath }}
+    type: DirectoryOrCreate
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{ required "storage.nodeName is required when storage.enabled=true" .Values.storage.nodeName }}
+{{- end }}

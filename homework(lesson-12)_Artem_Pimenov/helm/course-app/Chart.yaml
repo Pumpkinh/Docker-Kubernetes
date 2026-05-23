@@ -1,0 +1,6 @@
+apiVersion: v2
+name: course-app
+description: Guess the Number application chart with CloudNativePG-managed PostgreSQL
+type: application
+version: 0.1.0
+appVersion: "lesson-12"

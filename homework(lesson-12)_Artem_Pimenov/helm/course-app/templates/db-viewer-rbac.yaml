@@ -1,0 +1,39 @@
+{{- if .Values.rbac.dbViewer.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.rbac.dbViewer.serviceAccountName }}
+  labels:
+    {{- include "course-app.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Values.rbac.dbViewer.roleName }}
+  labels:
+    {{- include "course-app.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - postgresql.cnpg.io
+    resources:
+      - clusters
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Values.rbac.dbViewer.roleName }}-binding
+  labels:
+    {{- include "course-app.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.rbac.dbViewer.serviceAccountName }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Values.rbac.dbViewer.roleName }}
+{{- end }}
